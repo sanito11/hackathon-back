@@ -4,7 +4,6 @@ const app = express();
 
 const PORT = 1234;
 
-const authRoute = require('./routes/authRoute')
 const userRoute = require('./routes/userRoutes')
 
 
