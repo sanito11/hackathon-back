@@ -1,11 +1,10 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
+const express = require("express");
+const cors = require("cors");
+const app = express();
 
-const PORT = 1234
+const PORT = 1234;
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
-
-app.listen(PORT, () => console.log(`Running at ${PORT}!`))
+app.listen(PORT, () => console.log(`Running na sirr at ${PORT}!`));
