@@ -38,7 +38,7 @@ const register = async (req, res) => {
                 dob,
                 gender,
                 email,
-                password
+                hashedPassword
             ])
 
         res.status(201)
