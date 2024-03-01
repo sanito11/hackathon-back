@@ -7,4 +7,4 @@ const PORT = 1234;
 app.use(cors());
 app.use(express.json());
 
-app.listen(PORT, () => console.log(`Running na sirr at ${PORT}!`));
+app.listen(PORT, () => console.log(`Running na bro at ${PORT}!`));
