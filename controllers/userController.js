@@ -1,9 +1,9 @@
-import router from '../routes/authRoute'
+
 
 const db = require('../config/db')
 const bcrypt = require('bcrypt')
 
-export const register = async (req, res) => {
+exports.register = async (req, res) => {
 
     const {
         firstName,
@@ -56,7 +56,7 @@ export const register = async (req, res) => {
 }
 
 
-export const handleLogin = async (req, res) => {
+exports.handleLogin = async (req, res) => {
     try {
         const { email, password, role: accountRole } = req.body
 
@@ -124,4 +124,3 @@ export const handleLogin = async (req, res) => {
 
 }
 
-module.exports = router

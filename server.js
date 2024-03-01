@@ -4,15 +4,16 @@ const app = express();
 
 const PORT = 1234;
 
-const authRoute = require('./routes/authRoute')
 const userRoute = require('./routes/userRoutes')
-
+const applicantsRoute = require('./routes/applicantsRoute')
 
 
 app.use(cors());
 app.use(express.json());
 
 app.use('/', userRoute)
+app.use('/applicants', applicantsRoute)
+
 
 app.listen(PORT, () => console.log(`Running na bro at ${PORT}!`));
 
