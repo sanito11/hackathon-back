@@ -38,7 +38,7 @@ const register = async (req, res) => {
                 dob,
                 gender,
                 email,
-                password
+                hashedPassword
             ])
 
         res.status(201)
@@ -52,3 +52,5 @@ const register = async (req, res) => {
     }
 
 }
+
+module.exports = register
