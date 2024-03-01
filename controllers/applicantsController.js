@@ -60,19 +60,41 @@ exports.editApplicant = async (req, res) => {
         const { id } = req.params
         const { person_id, application_id } = req.body
 
+        console.log(id, person_id, application_id)
         if (isNaN(Number(id))) return res.sendStatus(400)
 
         const results = await db.query(
-            `UPDATE applicants SET
-            person_id = $1,
-            application_id = $2
-            WHERE applicants_id = $3
+            `UPDATE applicants SET person_id = $1, application_id = $2 WHERE applicant_id = $3 RETURNING *
         `, [person_id, application_id, id])
+
+        if (results.rowCount === 0) return res.sendStatus(404)
+
+        console.log(results.rows[0])
 
         res.status(200).json({ message: 'Okay' })
 
     } catch (error) {
         console.log(error)
-        res.status(500)
+        res.status(500).json({ message: error.message })
+    }
+}
+
+exports.deleteApplicant = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        if (isNaN(Number(id))) return res.sendStatus(400)
+
+        const results = await db.query('DELETE FROM applicants WHERE applicant_id = $1', [id])
+
+        if (results.rowCount === 0) return res.sendStatus(404)
+
+        console.log(results.rows[0])
+
+        res.status(200).json({ message: 'Deleted' })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
     }
 }

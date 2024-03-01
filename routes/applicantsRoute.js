@@ -8,5 +8,6 @@ router.route('/').get(applicantsRoute.getApplicants)
 
 router.route('/:id').get(applicantsRoute.getApplicant)
     .put(applicantsRoute.editApplicant)
+    .delete(applicantsRoute.deleteApplicant)
 
 module.exports = router 
