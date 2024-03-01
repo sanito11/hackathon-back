@@ -14,7 +14,7 @@ const handleLogin = async (req, res) => {
         }
 
         let accounts = accountRole.toLowerCase() == 'user' ? await db.query('SELECT user_id, email, password FROM users')
-            : accountRole.toLowerCase() == 'employeer' ? await db.query('SELECT company_id, email, password FROM company') :
+            : accountRole.toLowerCase() == 'employer' ? await db.query('SELECT company_id, email, password FROM company') :
                 null
 
 
@@ -26,7 +26,7 @@ const handleLogin = async (req, res) => {
                     status: 204
                 })
         }
-        console.log(accounts.rows)
+
         const foundUser = accounts.rows?.find(account => account?.email === email)
 
         if (!foundUser) {
