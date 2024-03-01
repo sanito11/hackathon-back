@@ -9,7 +9,7 @@ const applicantsRoute = require('./routes/applicantsRoute')
 const applicationsRoute = require('./routes/applicationsRoute')
 const companiesRoute = require('./routes/companiesRoute')
 const workersRoute = require('./routes/workersRoute')
-
+const jobsRoute = require('./routes/jobsRoute')
 
 app.use(cors());
 app.use(express.json());
@@ -19,6 +19,7 @@ app.use('/applicants', applicantsRoute)
 app.use('/applications', applicationsRoute)
 app.use('/companies', companiesRoute)
 app.use('/workers', workersRoute)
+app.use('/jobs', jobsRoute)
 
 app.listen(PORT, () => console.log(`Running na bro at ${PORT}!`));
 
