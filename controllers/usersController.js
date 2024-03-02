@@ -1,13 +1,10 @@
-const { application } = require('express')
 const db = require('../config/db')
 
-exports.getApplicants = async (req, res) => {
+exports.getUsers = async (req, res) => {
     try {
-        const results = await db.query('SELECT app.applicant_id, users.firstname, users.middlename, users.lastname FROM applicants app INNER JOIN users ON users.user_id = app.user_id;')
+        const results = await db.query('SELECT * from users')
 
         if (results.rowCount === 0) return res.sendStatus(404)
-
-
 
         res.status(200)
             .json(results.rows)
@@ -18,13 +15,13 @@ exports.getApplicants = async (req, res) => {
     }
 }
 
-exports.getApplicant = async (req, res) => {
+exports.getUser = async (req, res) => {
     try {
         const { id } = req.params
 
         if (isNaN(Number(id))) return res.sendStatus(400)
 
-        const results = await db.query(`SELECT * FROM applicants WHERE applicant_id = $1`, [id])
+        const results = await db.query(`SELECT * FROM users WHERE user_id = $1`, [id])
 
         if (results.rowCount === 0) return res.sendStatus(404)
 
@@ -37,13 +34,13 @@ exports.getApplicant = async (req, res) => {
     }
 }
 
-exports.addApplicant = async (req, res) => {
+exports.addUser = async (req, res) => {
     try {
-        const { person_id, application_id } = req.body
-
+        const { firstName, middleName, lastName, dob, gender, email, password } = req.body
+        console.log(req.body)
         const result = await db.query(
-            `INSERT INTO applicants (person_id, application_id) VALUES ($1, $2) RETURNING *`,
-            [person_id, application_id]
+            `INSERT INTO users (firstname, middlename, lastname, dob, gender, email, password) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [firstName, middleName, lastName, dob, gender, email, password]
         )
 
         console.log(result.rows[0])
@@ -54,21 +51,21 @@ exports.addApplicant = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500)
+        res.status(500).json({ message: error.message })
     }
 }
 
-exports.editApplicant = async (req, res) => {
+exports.editUser = async (req, res) => {
     try {
         const { id } = req.params
-        const { person_id, application_id } = req.body
+        const { firstName, middleName, lastName, dob, gender, email, password } = req.body
 
-        console.log(id, person_id, application_id)
+
         if (isNaN(Number(id))) return res.sendStatus(400)
 
         const results = await db.query(
-            `UPDATE applicants SET person_id = $1, application_id = $2 WHERE applicant_id = $3 RETURNING *
-        `, [person_id, application_id, id])
+            `UPDATE users SET firstname = $1, middlename = $2, lastname = $3, dob = $4, gender = $5, email = $6, password = $7 WHERE user_id = $8 RETURNING *
+        `, [firstName, middleName, lastName, dob, gender, email, password, id])
 
         if (results.rowCount === 0) return res.sendStatus(404)
 
@@ -82,13 +79,13 @@ exports.editApplicant = async (req, res) => {
     }
 }
 
-exports.deleteApplicant = async (req, res) => {
+exports.deleteUser = async (req, res) => {
     try {
         const { id } = req.params
 
         if (isNaN(Number(id))) return res.sendStatus(400)
 
-        const results = await db.query('DELETE FROM applicants WHERE applicant_id = $1', [id])
+        const results = await db.query('DELETE FROM users WHERE user_id = $1', [id])
 
         if (results.rowCount === 0) return res.sendStatus(404)
 

@@ -4,42 +4,39 @@ const bcrypt = require('bcrypt')
 const register = async (req, res) => {
 
     const {
-        firstName,
-        middleName,
-        lastName,
-        dob,
-        gender,
-        email,
-        password,
         role: accountRole,
     } = req.body
 
 
-
-    if (!email || !password) res.status(400).json({ status: 400 })
-
-    const hasDuplicate = await db.query(
-        'SELECT email FROM users WHERE email = $1',
-        [email]
-    )
-
-    if (hasDuplicate.rowCount) return res.status(409).json({ status: 409 })
+    if (!req.body.email || !req.body.password) res.status(400).json({ status: 400 })
 
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const result = await db.query(
+
+        const result = accountRole.toLowerCase() == 'user' ? await db.query(
             `INSERT INTO users (firstname, middlename, lastname, dob, gender, email, password)
             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
             [
-                firstName,
-                middleName,
-                lastName,
-                dob,
-                gender,
-                email,
+                req.body.firstName,
+                req.body.middleName,
+                req.body.lastName,
+                req.body.dob,
+                req.body.gender,
+                req.body.email,
                 hashedPassword
             ])
+            : await db.query(
+                `INSERT INTO company (company_name, company_address, email, password)
+                VALUES ($1, $2, $3, $4)
+                `,
+                [
+                    req.body.company_name,
+                    req.body.company_address,
+                    req.body.email,
+                    req.body.password
+                ]
+            )
 
         res.status(201)
             .json({
@@ -48,7 +45,7 @@ const register = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({ status: 500 })
+        res.status(500).json({ status: 500, message: error.message })
     }
 
 }
